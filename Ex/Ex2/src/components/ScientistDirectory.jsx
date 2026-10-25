@@ -12,6 +12,7 @@ export function ScientistDirectory() {
   const minIqId = useId();
   const sortId = useId();
 
+  // Derived state - No useEffect allowed
   const visible = people
     .filter(
       (p) =>
@@ -21,6 +22,14 @@ export function ScientistDirectory() {
     .toSorted((a, b) =>
       sortBy === 'iq-desc' ? b.iq - a.iq : a.age - b.age
     );
+
+  const handleDelete = (id) => {
+    setPeople((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const handleReset = () => {
+    setPeople(SMART_PEOPLE);
+  };
 
   return (
     <section aria-label="Pioneer Directory">
@@ -54,6 +63,10 @@ export function ScientistDirectory() {
           <option value="iq-desc">IQ (High to Low)</option>
           <option value="age-asc">Age (Low to High)</option>
         </select>
+
+        <button type="button" onClick={handleReset}>
+          Reset
+        </button>
       </form>
 
       <output role="status" aria-live="polite">
@@ -64,6 +77,9 @@ export function ScientistDirectory() {
         {visible.map((p) => (
           <li key={p.id}>
             {p.name} — IQ {p.iq}
+            <button type="button" onClick={() => handleDelete(p.id)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
