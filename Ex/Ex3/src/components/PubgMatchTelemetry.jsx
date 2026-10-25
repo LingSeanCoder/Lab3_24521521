@@ -1,99 +1,129 @@
-// src/components/PubgMatchTelemetry.jsx
-import { useState, useEffect } from 'react';
-import { PUBG_VN_SQUADS } from '../data';
+/* src/components/PubgMatchTelemetry.css */
 
-// Simulated API Function
-const fetchKraftonPubgTelemetry = (squadId, signal) => {
-  return new Promise((resolve, reject) => {
-    // 1. Handle Abort Signal
-    const abortHandler = () => {
-      clearTimeout(timeoutId);
-      reject(new Error('AbortError'));
-    };
-    signal.addEventListener('abort', abortHandler);
+/* Container */
+section[aria-label="KRAFTON PUBG Telemetry Radar"] {
+  font-family: system-ui, -apple-system, sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-    // 2. Simulate Network Delay
-    const timeoutId = setTimeout(() => {
-      signal.removeEventListener('abort', abortHandler);
+/* Squad Selector */
+nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
 
-      if (signal.aborted) {
-        reject(new Error('AbortError'));
-        return;
-      }
+nav button {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 1rem;
+}
 
-      // 3. Simulate 35% Packet Loss
-      if (Math.random() < 0.35) {
-        reject(new Error('Packet Loss'));
-        return;
-      }
+nav button:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
 
-      // 4. Return Data
-      const squad = PUBG_VN_SQUADS.find((s) => s.id === squadId);
-      resolve(squad);
-    }, 1000);
-  });
-};
+/* Active button styling using attribute selector based on inline style */
+nav button[style*="bold"] {
+  border-color: #1a5cff;
+  background-color: #e6f0ff;
+  color: #1a5cff;
+  box-shadow: 0 0 8px rgba(26, 92, 255, 0.3);
+}
 
-export function PubgMatchTelemetry() {
-  const [view, setView] = useState({ status: 'IDLE', data: null, error: null });
-  const [squadId, setSquadId] = useState('ces');
-  const [retryTick, setRetryTick] = useState(0);
+/* Skeleton Loader */
+.skeleton-card {
+  height: 220px;
+  background-color: #1a5cff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
 
-  useEffect(() => {
-    const controller = new AbortController();
-    
-    setView({ status: 'LOADING', data: null, error: null });
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    box-shadow: 0 0 10px #1a5cff;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 20px #1a5cff, 0 0 30px #1a5cff;
+  }
+  100% {
+    opacity: 0.6;
+    box-shadow: 0 0 10px #1a5cff;
+  }
+}
 
-    fetchKraftonPubgTelemetry(squadId, controller.signal)
-      .then((payload) => {
-        setView({ status: 'SUCCESS', data: payload, error: null });
-      })
-      .catch((err) => {
-        // Safe Abort Error Guard
-        if (err.message === 'AbortError') return;
-        setView({ status: 'ERROR', data: null, error: err.message });
-      });
+/* Alert Box */
+.alert-box, 
+section[role="alert"] {
+  background-color: #ffe6e6;
+  border: 2px solid #ff4d4d;
+  color: #cc0000;
+  padding: 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
 
-    // Cleanup function to abort request on unmount or rapid squad switch
-    return () => controller.abort();
-  }, [squadId, retryTick]);
+section[role="alert"] p {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
 
-  return (
-    <section aria-label="KRAFTON PUBG Telemetry Radar">
-      <nav>
-        {PUBG_VN_SQUADS.map((squad) => (
-          <button
-            key={squad.id}
-            onClick={() => setSquadId(squad.id)}
-            style={{ fontWeight: squadId === squad.id ? 'bold' : 'normal' }}
-          >
-            {squad.name}
-          </button>
-        ))}
-      </nav>
+section[role="alert"] button {
+  background-color: #ff4d4d;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 4px 6px rgba(255, 77, 77, 0.2);
+}
 
-      {view.status === 'LOADING' && (
-        <div className="skeleton-card" aria-busy="true">
-          Syncing KRAFTON Radar...
-        </div>
-      )}
+section[role="alert"] button:hover {
+  background-color: #cc0000;
+}
 
-      {view.status === 'ERROR' && (
-        <section role="alert">
-          <p>Error: {view.error}</p>
-          <button onClick={() => setRetryTick((t) => t + 1)}>
-            Reconnect Satellite (Retry)
-          </button>
-        </section>
-      )}
+section[role="alert"] button:active {
+  transform: scale(0.98);
+}
 
-      {view.status === 'SUCCESS' && (
-        <article aria-live="polite">
-          <h3>
-            {view.data.name} — Kills: {view.data.kills}
-          </h3>
-        </article>
-      )}
-    </section>
-  );
+/* Success Article */
+article[aria-live="polite"] {
+  background-color: #e6f7ff;
+  border: 2px solid #1a5cff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+article[aria-live="polite"] h3 {
+  margin: 0;
+  color: #003399;
+  font-size: 1.3rem;
 }
