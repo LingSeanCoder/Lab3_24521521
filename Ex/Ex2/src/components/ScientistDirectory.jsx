@@ -5,7 +5,7 @@ import { SMART_PEOPLE } from '../data';
 export function ScientistDirectory() {
   const [people, setPeople] = useState(SMART_PEOPLE);
   const [query, setQuery] = useState('');
-  const [minIq, setMinIq] = useState(160);
+  const [minIq, setMinIq] = useState(150);
   const [sortBy, setSortBy] = useState('iq-desc');
 
   const searchId = useId();
