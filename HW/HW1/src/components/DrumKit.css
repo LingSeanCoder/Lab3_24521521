@@ -1,0 +1,178 @@
+/* Zero Div-Soup CSS */
+.drum-kit-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #1e1e24 0%, #0d0d12 100%);
+  color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  padding: 2rem;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.drum-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.drum-header h1 {
+  font-size: 3rem;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  background: linear-gradient(90deg, #ff8a00, #e52e71);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(229, 46, 113, 0.3);
+}
+
+.drum-header p {
+  color: #888;
+  font-size: 1.1rem;
+}
+
+kbd {
+  background-color: #333;
+  border-radius: 4px;
+  border: 1px solid #555;
+  box-shadow: 0 2px 0 #222;
+  color: #fff;
+  display: inline-block;
+  font-size: 0.9em;
+  font-weight: bold;
+  line-height: 1;
+  padding: 4px 6px;
+  margin: 0 2px;
+}
+
+/* Visual Decibel Meter */
+.decibel-container {
+  width: 100%;
+  max-width: 700px;
+  height: 16px;
+  background-color: #222;
+  border-radius: 8px;
+  margin-bottom: 3rem;
+  overflow: hidden;
+  box-shadow: inset 0 4px 6px rgba(0,0,0,0.6);
+  border: 1px solid #333;
+}
+
+.decibel-bar {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #00f2fe, #4facfe, #f093fb, #f5576c);
+  transition: width 0.1s cubic-bezier(0.2, 0, 0, 1);
+  box-shadow: 0 0 15px rgba(79, 172, 254, 0.8);
+}
+
+/* Pads Grid */
+.pads-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  max-width: 700px;
+  width: 100%;
+}
+
+/* Pad Button Styling */
+.drum-pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(145deg, #2a2a35, #1a1a22);
+  border: 2px solid #3a3a45;
+  border-radius: 16px;
+  color: #a0a0b0;
+  cursor: pointer;
+  transition: all 0.08s ease-in-out;
+  user-select: none;
+  outline: none;
+  box-shadow: 6px 6px 12px #0a0a0e, -6px -6px 12px #2a2a36;
+}
+
+/* WCAG 2.2 AA Focus Ring */
+.drum-pad:focus-visible {
+  outline: 3px solid #4facfe;
+  outline-offset: 4px;
+}
+
+.drum-pad:hover {
+  border-color: #5a5a65;
+  color: #fff;
+}
+
+/* Khi Pad Active (Bấm chuột hoặc nhấn phím) */
+.drum-pad.is-active,
+.drum-pad:active {
+  background: linear-gradient(145deg, #e52e71, #ff8a00);
+  border-color: #ff8a00;
+  color: #fff;
+  transform: translateY(4px) scale(0.95);
+  box-shadow: 0 0 30px rgba(229, 46, 113, 0.6), inset 0 0 10px rgba(255,255,255,0.4);
+}
+
+.pad-label {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  font-family: monospace;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.pad-name {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* Hit Log */
+.hit-log-container {
+  text-align: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+.hit-log-container h2 {
+  font-size: 0.9rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 1rem;
+}
+
+.hit-log-output {
+  display: block;
+  background-color: #111;
+  padding: 1.5rem;
+  border-radius: 12px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 1.2rem;
+  color: #4facfe;
+  min-height: 60px;
+  border: 1px solid #333;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+  word-break: break-all;
+}
+
+/* Responsive (Mobile) */
+@media (max-width: 650px) {
+  .pads-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .pad-label {
+    font-size: 1.8rem;
+  }
+  .drum-header h1 {
+    font-size: 2rem;
+  }
+}
